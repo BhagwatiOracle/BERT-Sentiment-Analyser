@@ -1,0 +1,7 @@
+pandas
+matplotlib
+transformers
+torch
+gradio
+hf_xet
+wordcloud
