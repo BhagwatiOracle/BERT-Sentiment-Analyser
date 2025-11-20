@@ -1,5 +1,7 @@
 import gradio as gr
 from sentiment_analyser import sentiment_model
+from googleapiclient.discovery import build
+from LLM_review import generate_llm_review
 
 def create_interface(model_name):
 
@@ -73,8 +75,6 @@ def create_interface(model_name):
                     plot_output1 = gr.Plot(label="📈 Sentiment Distribution")
         
                     plot_output2 = gr.Plot(label="☁️ Word Cloud of Reviews")
-                
-                    
 
                 # Backend logic for batch analysis
                 def analyze_batch_reviews(file):
@@ -86,6 +86,66 @@ def create_interface(model_name):
                     inputs=file_input,
                     outputs=[table_output,plot_output1,plot_output2]
                 )
+
+
+            # ------------- TAB 3: YouTube Comments Analysis -------------
+            with gr.TabItem("🎥 YouTube Comments Analysis"):
+                gr.Markdown("### 📥 Analyze sentiments of YouTube video comments")
+
+                with gr.Blocks():
+                    youtube_url_input = gr.Textbox(
+                        label="Enter YouTube Video URL",
+                        placeholder="https://www.youtube.com/watch?v=example"
+                    )
+
+                    fetch_comments_button = gr.Button("📥 Fetch and Analyze Comments", variant="primary")
+                
+                with gr.Row():
+                    comments_table_output = gr.Dataframe(label="📋 YouTube Comments Sentiment Analysis", wrap=True)
+                
+                with gr.Row():
+                    comments_plot_output1 = gr.Plot(label="📈 Comments Sentiment Distribution")
+        
+                    comments_plot_output2 = gr.Plot(label="☁️ Word Cloud of Comments")
+
+                with gr.Row():
+                    ai_review_output = gr.Textbox(
+                        label="🤖 AI Generated Review Summary",
+                        interactive=False,
+                        placeholder="AI review summary will appear here...",
+                        lines=15,
+                        max_lines=50
+                    )
+
+
+                # Backend logic for YouTube comments analysis
+                def analyze_youtube_comments(url):
+                    from youtube_data import youtube_data
+                    video = youtube_data(url)
+                    video_id = video.get_video_id()
+                    api_key ="AIzaSyBlLzsJI3wwqtYP7wIsiMOMxi0_zzeB-G8"
+                    youtube = build('youtube', 'v3', developerKey=api_key)
+                    comments = youtube_data.get_comments_for_video(youtube, video_id)
+                    
+                    # Save comments to a temporary CSV for analysis
+                    temp_csv = "youtube_comments.csv"
+                    comments.to_csv(temp_csv, index=False, header=['review'])
+                    
+                    df, fig, fig_wc = analyser.analyse_batch(temp_csv)
+
+                    ai_review = generate_llm_review(df)
+
+                    return df, fig, fig_wc, ai_review
+                
+                
+                fetch_comments_button.click(
+                    analyze_youtube_comments,
+                    inputs=youtube_url_input,
+                    outputs=[comments_table_output, comments_plot_output1, comments_plot_output2,ai_review_output]
+                )
+
+                
+                    
 
         # Footer section
         gr.Markdown(
