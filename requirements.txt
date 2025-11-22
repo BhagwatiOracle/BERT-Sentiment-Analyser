@@ -5,3 +5,5 @@ torch
 gradio
 hf_xet
 wordcloud
+google-api-python-client
+dotenv

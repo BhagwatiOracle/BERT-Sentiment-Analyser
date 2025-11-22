@@ -10,6 +10,7 @@ class sentiment_model:
         self.model = BertForSequenceClassification.from_pretrained(model_name)
         self.tokenizer = BertTokenizer.from_pretrained(model_name)
 
+
     def analyse_single(self,text):
 
         inputs = self.tokenizer(text, return_tensors='pt', padding=True,truncation=True)
@@ -22,6 +23,7 @@ class sentiment_model:
         labels = ['Negative', 'Positive']
 
         return labels[predicted_class]
+    
     
     def analyse_batch(self,file_path):
 
@@ -63,9 +65,7 @@ class sentiment_model:
         ax_wc.axis('off')
         ax_wc.set_title("Word Cloud of Reviews")
 
-        
-
-        
+                
         return df, fig, fig_wc
 
 

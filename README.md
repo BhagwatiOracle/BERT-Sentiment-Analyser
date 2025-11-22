@@ -33,13 +33,11 @@ This project is a **Sentiment Analysis Application** built using a **fine-tuned 
 
 # 🚀 Features
 
-- 🔍 **Sentiment Prediction** for individual or batch reviews  
-- 📊 **Charts**: Bar chart, pie chart & confidence visualization  
-- ☁️ **Word Cloud** generation  
-- 📁 **CSV Upload** support for bulk review analysis  
-- 🧩 **Modular Model Architecture**  
-- 🐳 **Docker Support** for simple deployment  
-- 🖥️ **Easy-to-use Interface** built with Gradio  
+- **Single Review Analysis** - analyse sentiment of single review
+
+- **Batch Review Analysis** - analyse sentiment of multiple reviews uploaded in CSV file with review column .
+
+- **Youtube Comment Analysis** - fetch the comments of youtube video and analyse it's sentiment.
 
 ---
 
@@ -49,14 +47,19 @@ This project is a **Sentiment Analysis Application** built using a **fine-tuned 
   <summary><strong>📌 Click to expand UI Screenshots</strong></summary>
   <br>
 
-  ### 🔹 Home Interface (Gradio UI)
+  ### 🔹 Single Review Analysis
+  <p align="center">
+    <img src="assets/UI_1.png" width="70%">
+  </p>
+
+  ### 🔹 Batch Analysis Output & Word Cloud Visualization
   <p align="center">
     <img src="assets/UI_2.png" width="70%">
   </p>
 
-  ### 🔹 Sentiment Analysis Output & Word Cloud Visualization
+  ### 🔹 YouTube Comment Analysis 
   <p align="center">
-    <img src="assets/UI_1.png" width="70%">
+    <img src="assets/UI_3.png" width="70%">
   </p>
 
 </details>
@@ -71,13 +74,16 @@ This project is a **Sentiment Analysis Application** built using a **fine-tuned 
 📦 BERT-Sentiment-Analyzer
 │
 ├── sentiment_analyser.py      # Model class (modular + reusable)
+├── LLM_review.py              # LLM-based review analysis module
+├── youtube_data.py            # Fetch + preprocess YouTube comments/videos
 ├── app_interface.py           # Gradio UI
 ├── requirements.txt           
 ├── Dockerfile                 
 ├── .dockerignore              
+├── .gitignore                 
 ├── README.md                  
 ├── assets/                    # screenshots or icons
-└── BERT_Fine_Tuning.ipynb     # Notebook used for fine-tuning 
+└── BERT_Fine_Tuning.ipynb     # fine-tuned BERT model
 
 ````
 
@@ -102,7 +108,14 @@ source venv/bin/activate     # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4️⃣ Run the app
+4️⃣ Create .env file and set up api keys
+```bash
+GROQ_API_KEY = "your_groq_api_key"
+
+YOUTUBE_DATA_API_KEY = "your_youtube_data_api_key"
+```
+
+5️⃣ Run the app
 
 ```bash
 python app_interface.py

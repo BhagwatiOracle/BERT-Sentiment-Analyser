@@ -2,6 +2,9 @@ import gradio as gr
 from sentiment_analyser import sentiment_model
 from googleapiclient.discovery import build
 from LLM_review import generate_llm_review
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 def create_interface(model_name):
 
@@ -123,7 +126,7 @@ def create_interface(model_name):
                     from youtube_data import youtube_data
                     video = youtube_data(url)
                     video_id = video.get_video_id()
-                    api_key ="AIzaSyBlLzsJI3wwqtYP7wIsiMOMxi0_zzeB-G8"
+                    api_key = os.getenv("YOUTUBE_DATA_API_KEY")
                     youtube = build('youtube', 'v3', developerKey=api_key)
                     comments = youtube_data.get_comments_for_video(youtube, video_id)
                     
